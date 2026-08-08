@@ -1,0 +1,19 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+.env
+.env.local
+*.local
+
+# eval + ingest scratch
+evals/results/*.local.json
+corpus/.embedded/
+
+# logs
+*.log
+
+.DS_Store
+.idea/
+.vscode/
