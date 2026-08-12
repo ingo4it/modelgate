@@ -1,0 +1,90 @@
+// modelgate data model.
+//
+// Documents are ingested, split into Chunks, embedded, and stored with a
+// pgvector column for ANN retrieval. Every answer request writes a UsageEvent
+// (tokens, cost, latency, cache outcome). The semantic cache is its own table
+// keyed by the question embedding.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
+}
+
+model Document {
+  id          String   @id @default(uuid()) @db.Uuid
+  sourceUri   String   @unique // path or URL the doc was ingested from
+  title       String
+  sha256      String // content hash; re-ingest is a no-op if unchanged
+  corpusTag   String // logical corpus this doc belongs to
+  ingestedAt  DateTime @default(now())
+  chunkCount  Int      @default(0)
+
+  chunks      Chunk[]
+
+  @@index([corpusTag])
+  @@map("documents")
+}
+
+model Chunk {
+  id           String   @id @default(uuid()) @db.Uuid
+  documentId   String   @db.Uuid
+  document     Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  ordinal      Int // position within the document, for citation ranges
+  content      String
+  tokenCount   Int
+  // pgvector column; dimension must match EMBEDDING_DIM. Similarity search is
+  // done in raw SQL (`embedding <=> $1`) — Prisma can't express the operator.
+  embedding    Unsupported("vector(1024)")?
+  createdAt    DateTime @default(now())
+
+  @@unique([documentId, ordinal])
+  @@map("chunks")
+}
+
+model SemanticCacheEntry {
+  id             String   @id @default(uuid()) @db.Uuid
+  // normalised question text, kept for debugging / exact-dupe detection
+  question       String
+  questionEmbedding Unsupported("vector(1024)")
+  answer         String
+  citations      Json // [{ documentId, ordinal, sourceUri, quote }]
+  model          String
+  corpusVersion  String
+  hits           Int      @default(0)
+  createdAt      DateTime @default(now())
+  expiresAt      DateTime
+
+  @@index([corpusVersion])
+  @@index([expiresAt])
+  @@map("semantic_cache")
+}
+
+model UsageEvent {
+  id             String   @id @default(uuid()) @db.Uuid
+  requestId      String
+  route          String // "answer" | "answer.stream"
+  question       String
+  model          String // model that actually produced the answer
+  requestedModel String // configured primary, before any fallback
+  fellBack       Boolean  @default(false)
+  cacheOutcome   String // "miss" | "exact" | "semantic"
+  inputTokens    Int      @default(0)
+  outputTokens   Int      @default(0)
+  embeddingTokens Int     @default(0)
+  retrievalMs    Int      @default(0)
+  modelMs        Int      @default(0)
+  totalMs        Int      @default(0)
+  costUsd        Decimal  @default(0) @db.Decimal(12, 8)
+  refused        Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([model])
+  @@map("usage_events")
+}
