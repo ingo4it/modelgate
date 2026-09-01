@@ -1,0 +1,16 @@
+{
+  "status": "not-yet-measured",
+  "note": "Placeholder. `pnpm eval` overwrites this with a real run. Aggregates are null on purpose — no fabricated scores are committed. `targets` mirrors the table in the top-level README; a run must meet all four to pass `--gate`.",
+  "generatedAt": null,
+  "provider": null,
+  "judge": null,
+  "cases": 8,
+  "targets": {
+    "faithfulness": 0.9,
+    "answerRelevance": 0.85,
+    "hitRateAt5": 0.8,
+    "p95LatencyMs": 4000
+  },
+  "aggregate": null,
+  "perCase": []
+}
