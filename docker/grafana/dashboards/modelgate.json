@@ -1,0 +1,76 @@
+{
+  "title": "modelgate — cost & latency",
+  "uid": "modelgate-main",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "time": { "from": "now-24h", "to": "now" },
+  "refresh": "1m",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Requests / min by cache outcome",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "format": "time_series",
+          "rawSql": "SELECT date_trunc('minute', \"createdAt\") AS time, \"cacheOutcome\" AS metric, count(*) FROM usage_events WHERE $__timeFilter(\"createdAt\") GROUP BY 1, 2 ORDER BY 1"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "p50 / p95 total latency (ms)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "format": "time_series",
+          "rawSql": "SELECT date_trunc('minute', \"createdAt\") AS time, percentile_cont(0.5) WITHIN GROUP (ORDER BY \"totalMs\") AS p50, percentile_cont(0.95) WITHIN GROUP (ORDER BY \"totalMs\") AS p95 FROM usage_events WHERE $__timeFilter(\"createdAt\") GROUP BY 1 ORDER BY 1"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Cost / 1k requests (USD, window)",
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "format": "table",
+          "rawSql": "SELECT (sum(\"costUsd\") / greatest(count(*), 1)) * 1000 AS \"cost_per_1k\" FROM usage_events WHERE $__timeFilter(\"createdAt\")"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Cache hit rate",
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 8 },
+      "targets": [
+        {
+          "format": "table",
+          "rawSql": "SELECT avg((\"cacheOutcome\" <> 'miss')::int) FROM usage_events WHERE $__timeFilter(\"createdAt\")"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Fallback rate",
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 8 },
+      "targets": [
+        {
+          "format": "table",
+          "rawSql": "SELECT avg(\"fellBack\"::int) FROM usage_events WHERE $__timeFilter(\"createdAt\")"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Token spend / min (input + output)",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
+      "targets": [
+        {
+          "format": "time_series",
+          "rawSql": "SELECT date_trunc('minute', \"createdAt\") AS time, sum(\"inputTokens\") AS input, sum(\"outputTokens\") AS output FROM usage_events WHERE $__timeFilter(\"createdAt\") GROUP BY 1 ORDER BY 1"
+        }
+      ]
+    }
+  ]
+}
