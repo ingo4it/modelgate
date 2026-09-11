@@ -1,1 +1,42 @@
-{}
+{
+  "e117cc4f41ec1b23e96a9c3e76707e28": {
+    "text": "Claude Sonnet 5 costs $2 per million input tokens [1].",
+    "inputTokens": 812,
+    "outputTokens": 14
+  },
+  "25693f23a3506226b01b6522a970faa6": {
+    "text": "Claude Haiku 4.5 has a 200K token context window [1].",
+    "inputTokens": 940,
+    "outputTokens": 13
+  },
+  "efa97285437bb1e0ed08701aafa533a5": {
+    "text": "modelgate uses pgvector instead of a dedicated vector database because at this corpus size pgvector keeps the vectors in the same Postgres instance as the rest of the data, avoiding a second datastore to operate, while HNSW indexing keeps recall and latency acceptable [1].",
+    "inputTokens": 890,
+    "outputTokens": 55
+  },
+  "17b2d1959c399afbe49e44019309b011": {
+    "text": "The semantic cache requires cosine similarity of at least 0.97; the threshold is deliberately high because a wrong cache hit returns a confident answer to a different question, which is worse than a miss [1].",
+    "inputTokens": 930,
+    "outputTokens": 43
+  },
+  "17138fd281d2912ac203c225113c7131": {
+    "text": "modelgate falls back to the secondary model on a retryable provider error \u2014 a timeout, a rate limit, an overload, or a transport failure \u2014 and for streaming responses only if the primary fails before the first token is sent [1].",
+    "inputTokens": 905,
+    "outputTokens": 47
+  },
+  "16dc4d456d0684be0f091b6c276b0d6e": {
+    "text": "modelgate should abstain, replying exactly \"I don't have enough context to answer that.\" rather than guessing [1].",
+    "inputTokens": 870,
+    "outputTokens": 25
+  },
+  "195ec31601af494c575f26b7c3884760": {
+    "text": "I don't have enough context to answer that.",
+    "inputTokens": 810,
+    "outputTokens": 10
+  },
+  "822ec8201344414544195a2c5961db1e": {
+    "text": "Yes \u2014 closing the connection aborts the SSE stream and cancels the underlying model call via an AbortController, so a cancelled request stops incurring cost immediately [1].",
+    "inputTokens": 915,
+    "outputTokens": 36
+  }
+}
