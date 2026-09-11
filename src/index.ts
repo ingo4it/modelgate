@@ -17,10 +17,7 @@ sweep.unref();
 
 installShutdown(app, {
   logger: deps.logger,
-  onClose: [
-    async () => clearInterval(sweep),
-    () => closeDeps(deps),
-  ],
+  onClose: [async () => clearInterval(sweep), () => closeDeps(deps)],
 });
 
 await app.listen({ host: "0.0.0.0", port: config.port });

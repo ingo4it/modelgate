@@ -40,7 +40,7 @@ it re-records the fixtures.
 - Fixtures are a maintenance cost: a prompt change is a two-step PR (change +
   re-record). Accepted — it's the same discipline as updating a snapshot test.
 - The offline judge is a heuristic (citation density + abstain check), not a
-  real faithfulness judge. The gate's *offline* faithfulness number is a proxy;
+  real faithfulness judge. The gate's _offline_ faithfulness number is a proxy;
   the authoritative number comes from the `--provider anthropic` run, which uses
   an LLM judge. The report records which judge produced each score.
 - Targets (0.90 / 0.85 / 0.80 / 4s) are asserted in `evals/run.ts` and mirrored

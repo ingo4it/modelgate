@@ -25,12 +25,12 @@ pnpm eval --gate               # exit non-zero if any aggregate misses target (C
 
 ## Metrics & targets
 
-| Metric | How it's scored | Target |
-| --- | --- | --- |
-| Faithfulness | LLM judge: fraction of answer claims the cited context supports (heuristic: citation density + abstain check when offline) | ≥ 0.90 |
-| Answer relevance | cosine(answer, reference) in embedding space; capped at 0.5 if a `mustContain` phrase is missing | ≥ 0.85 |
-| Retrieval hit-rate @5 | of the sources a case needs, how many are in the top-5 retrieved chunks | ≥ 0.80 |
-| p95 latency | wall-clock per case, cache disabled | ≤ 4000 ms |
+| Metric                | How it's scored                                                                                                            | Target    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------- |
+| Faithfulness          | LLM judge: fraction of answer claims the cited context supports (heuristic: citation density + abstain check when offline) | ≥ 0.90    |
+| Answer relevance      | cosine(answer, reference) in embedding space; capped at 0.5 if a `mustContain` phrase is missing                           | ≥ 0.85    |
+| Retrieval hit-rate @5 | of the sources a case needs, how many are in the top-5 retrieved chunks                                                    | ≥ 0.80    |
+| p95 latency           | wall-clock per case, cache disabled                                                                                        | ≤ 4000 ms |
 
 ## Versioning the dataset
 

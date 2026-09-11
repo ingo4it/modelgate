@@ -9,5 +9,10 @@ export const answerBody = z.object({
 export type AnswerBody = z.infer<typeof answerBody>;
 
 export const usageQuery = z.object({
-  windowHours: z.coerce.number().int().min(1).max(24 * 30).default(24),
+  windowHours: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(24 * 30)
+    .default(24),
 });

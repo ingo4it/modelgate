@@ -70,7 +70,11 @@ export class AnswerService {
     const { config } = this.d;
     const primary = config.model.primary;
 
-    const { text: question } = guardInput(rawQuestion, { maxChars: config.guardrails.maxQuestionChars }, this.d.logger);
+    const { text: question } = guardInput(
+      rawQuestion,
+      { maxChars: config.guardrails.maxQuestionChars },
+      this.d.logger,
+    );
 
     // 1. exact cache
     const exact = await this.d.exactCache.get(question, primary);
@@ -194,7 +198,11 @@ export class AnswerService {
     // 7. populate caches (best effort; don't cache uncited or fallback answers)
     if (!guarded.uncited && !completion.fellBack) {
       await Promise.allSettled([
-        this.d.exactCache.set(question, { answer: result.answer, citations: result.citations, model: result.model }),
+        this.d.exactCache.set(question, {
+          answer: result.answer,
+          citations: result.citations,
+          model: result.model,
+        }),
         this.d.semanticCache.store({
           question,
           questionEmbedding: queryVector,
@@ -225,7 +233,11 @@ export class AnswerService {
     const startedAt = performance.now();
     const { config } = this.d;
     const primary = config.model.primary;
-    const question = guardInput(rawQuestion, { maxChars: config.guardrails.maxQuestionChars }, this.d.logger).text;
+    const question = guardInput(
+      rawQuestion,
+      { maxChars: config.guardrails.maxQuestionChars },
+      this.d.logger,
+    ).text;
 
     const embed = await this.d.embedder.embed([{ text: question, kind: "query" }]);
     const queryVector = embed.vectors[0];
@@ -295,7 +307,11 @@ export class AnswerService {
 
     if (!guarded.uncited && !chosen.fellBack) {
       await Promise.allSettled([
-        this.d.exactCache.set(question, { answer: result.answer, citations: result.citations, model: result.model }),
+        this.d.exactCache.set(question, {
+          answer: result.answer,
+          citations: result.citations,
+          model: result.model,
+        }),
         this.d.semanticCache.store({
           question,
           questionEmbedding: queryVector,

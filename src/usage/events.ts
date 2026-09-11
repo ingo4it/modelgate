@@ -12,10 +12,7 @@ export type UsageRecord = {
   requestId: string;
   route: "answer" | "answer.stream";
   question: string;
-  result: Pick<
-    AnswerResult,
-    "model" | "requestedModel" | "fellBack" | "cacheOutcome" | "refused" | "usage"
-  >;
+  result: Pick<AnswerResult, "model" | "requestedModel" | "fellBack" | "cacheOutcome" | "refused" | "usage">;
 };
 
 export class UsageRecorder {

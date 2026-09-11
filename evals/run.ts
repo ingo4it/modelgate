@@ -112,12 +112,22 @@ async function main(): Promise<void> {
     }
     const latencyMs = Math.round(performance.now() - started);
 
-    const retrieved = await retrieval.retrieve(c.question, (await embedder.embed([{ text: c.question, kind: "query" }])).vectors[0] ?? []);
+    const retrieved = await retrieval.retrieve(
+      c.question,
+      (await embedder.embed([{ text: c.question, kind: "query" }])).vectors[0] ?? [],
+    );
     const hit = hitRateAtK(retrieved.context.used, c.expectedSources, 5);
     const relevance = await answerRelevance(embedder, answer, c.reference, c.mustContain);
     const faith = await judge.score({ answer, context: retrieved.context.text });
 
-    rows.push({ id: c.id, latencyMs, faithfulness: faith.score, answerRelevance: relevance, hitRateAt5: hit, error });
+    rows.push({
+      id: c.id,
+      latencyMs,
+      faithfulness: faith.score,
+      answerRelevance: relevance,
+      hitRateAt5: hit,
+      error,
+    });
   }
 
   const agg = aggregate(rows);

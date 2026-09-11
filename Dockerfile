@@ -8,7 +8,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile
 COPY prisma ./prisma
 RUN pnpm prisma generate
-COPY tsconfig.json ./
+COPY tsconfig.json tsconfig.build.json ./
 COPY src ./src
 RUN pnpm build
 RUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile --prod

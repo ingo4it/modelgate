@@ -15,13 +15,24 @@ type Entry = RetrievedChunk & { embedding: number[] };
 export class MemoryVectorStore implements VectorSearch {
   private entries: Entry[] = [];
 
-  async loadCorpus(dir: string, embedder: Embedder, opts: { targetTokens: number; overlapTokens: number }): Promise<void> {
+  async loadCorpus(
+    dir: string,
+    embedder: Embedder,
+    opts: { targetTokens: number; overlapTokens: number },
+  ): Promise<void> {
     for (const name of await readdir(dir)) {
       if (![".md", ".txt"].includes(extname(name))) continue;
       const content = await readFile(join(dir, name), "utf8");
-      const title = content.split("\n").find((l) => l.startsWith("# "))?.slice(2).trim() ?? basename(name);
+      const title =
+        content
+          .split("\n")
+          .find((l) => l.startsWith("# "))
+          ?.slice(2)
+          .trim() ?? basename(name);
       const chunks = chunkDocument(content, opts);
-      const { vectors } = await embedder.embed(chunks.map((c) => ({ text: c.content, kind: "document" as const })));
+      const { vectors } = await embedder.embed(
+        chunks.map((c) => ({ text: c.content, kind: "document" as const })),
+      );
       chunks.forEach((c, i) => {
         this.entries.push({
           chunkId: `${name}#${c.ordinal}`,

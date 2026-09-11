@@ -46,7 +46,13 @@ export class SemanticCache {
     if (similarity < this.opts.minSimilarity) return null;
 
     await this.prisma.semanticCacheEntry.update({ where: { id: row.id }, data: { hits: { increment: 1 } } });
-    return { id: row.id, answer: row.answer, citations: row.citations as Citation[], model: row.model, similarity };
+    return {
+      id: row.id,
+      answer: row.answer,
+      citations: row.citations as Citation[],
+      model: row.model,
+      similarity,
+    };
   }
 
   async store(args: {
@@ -69,7 +75,9 @@ export class SemanticCache {
 
   /** Housekeeping: drop expired rows. Called on a timer by the server. */
   async sweep(): Promise<number> {
-    const { count } = await this.prisma.semanticCacheEntry.deleteMany({ where: { expiresAt: { lt: new Date() } } });
+    const { count } = await this.prisma.semanticCacheEntry.deleteMany({
+      where: { expiresAt: { lt: new Date() } },
+    });
     return count;
   }
 }

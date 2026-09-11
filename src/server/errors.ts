@@ -14,7 +14,13 @@ export class ApiError extends Error {
   readonly detail?: string;
   readonly headers?: Record<string, string>;
 
-  constructor(args: { status: number; code: string; title: string; detail?: string; headers?: Record<string, string> }) {
+  constructor(args: {
+    status: number;
+    code: string;
+    title: string;
+    detail?: string;
+    headers?: Record<string, string>;
+  }) {
     super(args.title);
     this.name = "ApiError";
     this.status = args.status;
@@ -37,9 +43,19 @@ export class ApiError extends Error {
 
 export const Errors = {
   badQuestion: (detail: string) =>
-    new ApiError({ status: 422, code: "invalid_question", title: "Question rejected by input guardrails", detail }),
+    new ApiError({
+      status: 422,
+      code: "invalid_question",
+      title: "Question rejected by input guardrails",
+      detail,
+    }),
   promptInjection: (detail: string) =>
-    new ApiError({ status: 422, code: "prompt_injection_suspected", title: "Question rejected: injection heuristics", detail }),
+    new ApiError({
+      status: 422,
+      code: "prompt_injection_suspected",
+      title: "Question rejected: injection heuristics",
+      detail,
+    }),
   noContext: () =>
     new ApiError({
       status: 422,
@@ -57,5 +73,10 @@ export const Errors = {
       headers: { "Retry-After": "5" },
     }),
   outputInvalid: (detail: string) =>
-    new ApiError({ status: 502, code: "output_guardrail_failed", title: "Model output failed validation", detail }),
+    new ApiError({
+      status: 502,
+      code: "output_guardrail_failed",
+      title: "Model output failed validation",
+      detail,
+    }),
 } as const;

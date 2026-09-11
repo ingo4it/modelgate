@@ -12,7 +12,9 @@ export type InputGuardConfig = { maxChars: number };
 
 export type CleanQuestion = { text: string; injectionReasons: string[] };
 
-// control chars other than tab / newline / carriage-return
+// control chars other than tab / newline / carriage-return — matching them is
+// the point of this regex, not an accident
+// eslint-disable-next-line no-control-regex
 const CONTROL_CHARS = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/;
 
 export function guardInput(raw: unknown, cfg: InputGuardConfig, logger: Logger): CleanQuestion {

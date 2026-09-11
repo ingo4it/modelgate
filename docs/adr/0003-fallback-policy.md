@@ -14,14 +14,14 @@ faster/cheaper model (`claude-haiku-4-5`).
 
 Downgrade on **retryable** failures, once:
 
-| Primary outcome | Action |
-| --- | --- |
-| timeout (`MODEL_TIMEOUT_MS`) | try fallback |
-| 429 rate limit | try fallback |
-| 529 / 503 overloaded | try fallback |
-| transport / connection error | try fallback |
-| 400 bad request | **fail** — it's our bug, a different model won't fix it |
-| `stop_reason: "refusal"` | **surface as 422** — not a transport problem |
+| Primary outcome              | Action                                                  |
+| ---------------------------- | ------------------------------------------------------- |
+| timeout (`MODEL_TIMEOUT_MS`) | try fallback                                            |
+| 429 rate limit               | try fallback                                            |
+| 529 / 503 overloaded         | try fallback                                            |
+| transport / connection error | try fallback                                            |
+| 400 bad request              | **fail** — it's our bug, a different model won't fix it |
+| `stop_reason: "refusal"`     | **surface as 422** — not a transport problem            |
 
 For **streaming**, fall back only if the primary fails before the first token.
 Once bytes are on the wire the stream can't be cleanly restarted, so a

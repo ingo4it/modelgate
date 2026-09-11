@@ -8,16 +8,19 @@ import { errorHandler } from "./errors-plugin.js";
 import { healthRoutes } from "./health.js";
 import { answerRoutes } from "../answer/answer.routes.js";
 
-const requestId = fp((app, _o, done) => {
-  app.addHook("onRequest", (req, reply, next) => {
-    const inbound = req.headers["x-request-id"];
-    req.reqId = (Array.isArray(inbound) ? inbound[0] : inbound) || randomUUID();
-    reply.header("x-request-id", req.reqId);
-    req.log = req.log.child({ reqId: req.reqId });
-    next();
-  });
-  done();
-}, { name: "request-id" });
+const requestId = fp(
+  (app, _o, done) => {
+    app.addHook("onRequest", (req, reply, next) => {
+      const inbound = req.headers["x-request-id"];
+      req.reqId = (Array.isArray(inbound) ? inbound[0] : inbound) || randomUUID();
+      reply.header("x-request-id", req.reqId);
+      req.log = req.log.child({ reqId: req.reqId });
+      next();
+    });
+    done();
+  },
+  { name: "request-id" },
+);
 
 /**
  * Build the HTTP app from injected `Deps`. Pure: no listen, no signals, no

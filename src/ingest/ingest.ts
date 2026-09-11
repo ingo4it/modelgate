@@ -68,9 +68,16 @@ async function main(): Promise<void> {
     const embedded: Array<{ ordinal: number; content: string; tokenCount: number; embedding: number[] }> = [];
     for (let i = 0; i < chunks.length; i += EMBED_BATCH) {
       const batch = chunks.slice(i, i + EMBED_BATCH);
-      const { vectors } = await embedder.embed(batch.map((c) => ({ text: c.content, kind: "document" as const })));
+      const { vectors } = await embedder.embed(
+        batch.map((c) => ({ text: c.content, kind: "document" as const })),
+      );
       batch.forEach((c, j) => {
-        embedded.push({ ordinal: c.ordinal, content: c.content, tokenCount: c.tokenEstimate, embedding: vectors[j] ?? [] });
+        embedded.push({
+          ordinal: c.ordinal,
+          content: c.content,
+          tokenCount: c.tokenEstimate,
+          embedding: vectors[j] ?? [],
+        });
       });
     }
 
@@ -89,7 +96,11 @@ function valueOf(args: string[], flag: string): string | undefined {
 }
 
 function firstHeading(md: string): string | undefined {
-  return md.split("\n").find((l) => l.startsWith("# "))?.slice(2).trim();
+  return md
+    .split("\n")
+    .find((l) => l.startsWith("# "))
+    ?.slice(2)
+    .trim();
 }
 
 main().catch((err) => {

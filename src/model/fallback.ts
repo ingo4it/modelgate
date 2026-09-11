@@ -42,7 +42,10 @@ export class FallbackProvider {
     }
   }
 
-  async *stream(req: CompletionRequest, signal?: AbortSignal): AsyncGenerator<StreamEvent & { chosen: ChosenModel }> {
+  async *stream(
+    req: CompletionRequest,
+    signal?: AbortSignal,
+  ): AsyncGenerator<StreamEvent & { chosen: ChosenModel }> {
     const attempt = async function* (
       this: FallbackProvider,
       model: string,
@@ -61,7 +64,10 @@ export class FallbackProvider {
       }
     } catch (err) {
       if (started || !(err instanceof ProviderError) || !err.retryable) throw err;
-      this.logger.warn({ from: this.primary, to: this.fallback, kind: err.kind }, "model fallback (pre-stream)");
+      this.logger.warn(
+        { from: this.primary, to: this.fallback, kind: err.kind },
+        "model fallback (pre-stream)",
+      );
       yield* attempt(this.fallback, true);
     }
   }

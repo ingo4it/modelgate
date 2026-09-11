@@ -63,15 +63,15 @@ flowchart LR
 
 ## Tech stack
 
-| Area | Choice |
-|------|--------|
-| Language | TypeScript (Node.js) |
-| Model API | Claude (`claude-sonnet-5` primary), configurable fallback |
-| Vectors | PostgreSQL + `pgvector` |
-| Transport | HTTP + SSE streaming |
-| Evals | custom harness (faithfulness / relevance / hit-rate), runs in CI |
-| Observability | per-request usage events → Postgres → Grafana |
-| Tests | Vitest + Testcontainers; recorded-fixture provider for deterministic runs |
+| Area          | Choice                                                                    |
+| ------------- | ------------------------------------------------------------------------- |
+| Language      | TypeScript (Node.js)                                                      |
+| Model API     | Claude (`claude-sonnet-5` primary), configurable fallback                 |
+| Vectors       | PostgreSQL + `pgvector`                                                   |
+| Transport     | HTTP + SSE streaming                                                      |
+| Evals         | custom harness (faithfulness / relevance / hit-rate), runs in CI          |
+| Observability | per-request usage events → Postgres → Grafana                             |
+| Tests         | Vitest + Testcontainers; recorded-fixture provider for deterministic runs |
 
 ## Getting started
 
@@ -91,13 +91,13 @@ pnpm eval                    # run the eval suite, print scores
 
 Committed under `evals/results/` and rendered in CI:
 
-| Metric | Score | Target |
-|--------|------:|-------:|
-| Faithfulness | _tbd_ | ≥ 0.90 |
-| Answer relevance | _tbd_ | ≥ 0.85 |
-| Retrieval hit-rate @5 | _tbd_ | ≥ 0.80 |
-| p95 latency (cache miss) | _tbd_ | ≤ 4 s |
-| Cost / 1k requests | _tbd_ | tracked |
+| Metric                   | Score |  Target |
+| ------------------------ | ----: | ------: |
+| Faithfulness             | _tbd_ |  ≥ 0.90 |
+| Answer relevance         | _tbd_ |  ≥ 0.85 |
+| Retrieval hit-rate @5    | _tbd_ |  ≥ 0.80 |
+| p95 latency (cache miss) | _tbd_ |   ≤ 4 s |
+| Cost / 1k requests       | _tbd_ | tracked |
 
 ## Project layout
 

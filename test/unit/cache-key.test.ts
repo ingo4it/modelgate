@@ -15,7 +15,9 @@ describe("exactCacheKey", () => {
   });
 
   it("changes with the model", () => {
-    expect(exactCacheKey("q", "claude-sonnet-5", "v1")).not.toBe(exactCacheKey("q", "claude-haiku-4-5", "v1"));
+    expect(exactCacheKey("q", "claude-sonnet-5", "v1")).not.toBe(
+      exactCacheKey("q", "claude-haiku-4-5", "v1"),
+    );
   });
 
   it("changes with the corpus version (bump = full invalidation)", () => {

@@ -27,7 +27,7 @@ built from a corpus that has since changed).
 
 ## Rationale
 
-- The failure mode that matters is a *confidently wrong* cached answer. Every
+- The failure mode that matters is a _confidently wrong_ cached answer. Every
   knob here trades hit rate for a lower chance of that: high threshold, version
   gating, short TTL.
 - Version-in-the-key beats a cache flush: no coordination, no thundering herd on

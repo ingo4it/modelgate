@@ -45,7 +45,11 @@ describe("guardOutput", () => {
   });
 
   it("strips citation markers that point at no chunk", () => {
-    const out = guardOutput({ rawAnswer: "The sky is blue [1] but not [9].", refused: false, usedChunks: used });
+    const out = guardOutput({
+      rawAnswer: "The sky is blue [1] but not [9].",
+      refused: false,
+      usedChunks: used,
+    });
     expect(out.answer).toContain("[1]");
     expect(out.answer).not.toContain("[9]");
   });

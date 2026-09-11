@@ -56,7 +56,11 @@ describe("FallbackProvider.complete", () => {
 
   it("does not fall back on a bad_request (our bug, not theirs)", async () => {
     const fb = new FallbackProvider(
-      provider({ complete: async (m) => { throw new ProviderError("bad", "bad_request", m); } }),
+      provider({
+        complete: async (m) => {
+          throw new ProviderError("bad", "bad_request", m);
+        },
+      }),
       "primary",
       "secondary",
       logger,

@@ -22,7 +22,8 @@ export type GuardedOutput = {
   piiFindings: PiiFinding[];
 };
 
-const ABSTAIN = /\b(i (don't|do not) (have|know)|not (in|covered by|found in) the (provided )?context|cannot answer)\b/i;
+const ABSTAIN =
+  /\b(i (don't|do not) (have|know)|not (in|covered by|found in) the (provided )?context|cannot answer)\b/i;
 
 export function guardOutput(args: {
   rawAnswer: string;
@@ -39,9 +40,7 @@ export function guardOutput(args: {
 
   // strip citation markers that don't correspond to a chunk in context
   const validMarkers = new Set(args.usedChunks.map((_, i) => i + 1));
-  const cleaned = trimmed.replace(/\[(\d{1,2})\]/g, (m, n: string) =>
-    validMarkers.has(Number(n)) ? m : "",
-  );
+  const cleaned = trimmed.replace(/\[(\d{1,2})\]/g, (m, n: string) => (validMarkers.has(Number(n)) ? m : ""));
 
   const { text: redacted, findings } = redactPii(cleaned.replace(/\s{2,}/g, " ").trim());
   const citations = citationsFor(redacted, args.usedChunks);
